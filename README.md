@@ -1,6 +1,6 @@
-# schedgen
+# menugen
 
-Schedule Generator is a Python program to generate the YAML for the Tippecanoe 
+Dining Menu Generator is a Python program to generate the YAML for the Tippecanoe 
 County 4-H website.
 
 - Reads data from Airtable base
