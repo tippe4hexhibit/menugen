@@ -18,7 +18,7 @@ Dumper.ignore_aliases = lambda *args : True
 
 log = logging.getLogger(__name__)
 
-CATEGORY_ORDER = ['Entrées', 'Drinks', 'À La Carte', 'Other Items']
+CATEGORY_ORDER = ['Entrées', 'À La Carte', 'Drinks', 'Flavors', 'Other Items']
 CATEGORY_ORDER_MAPPING = {category: index for index, category in enumerate(CATEGORY_ORDER)}
 
 
@@ -97,10 +97,9 @@ class MenuGenApp:
                 for item_id in dining_event['Menu Items IDs']:
                     dining_event['Menu Items'] += dining_eventmenuitems.get_item(item_id)
 
-                # This is likely not needed. The order is holding steady from AirTable
-                # dining_event['Menu Items'] = sorted(dining_event['Menu Items'],
-                #                                     key=lambda x: (CATEGORY_ORDER_MAPPING[x['Tag'][0]])
-                #                                     )
+                dining_event['Menu Items'] = sorted(dining_event['Menu Items'],
+                                                    key=lambda x: (CATEGORY_ORDER_MAPPING[x['Tag'][0]])
+                                                    )
 
             full_event_list['dates'][current_date]['events'].append(dining_event)
 
