@@ -14,6 +14,7 @@ class DiningVendors:
     def get_vendor(self, vendor_id):
 
         for vendor in self._vendor_data:
+            log.info(f'Searching {vendor_id} in {vendor}')
             if 'id' in vendor.keys() and vendor['id'] == vendor_id:
                 return vendor['fields']
 

@@ -66,8 +66,6 @@ class MenuGenApp:
         raw_dining_eventmenuitems = api.get_table(os.environ['AIRTABLE_BASE'],
                                                   os.environ['TABLE_DINING_EVENTMENUITEMS']).all()
 
-        # TODO: Dump Raw Vendor Data and processed version. What is going on ????
-
         log.info(f'Raw dining vendors is: {raw_dining_vendors}')
         dining_vendors = DiningVendors(raw_dining_vendors)
         log.info(f'Dining vendors is: {dining_vendors}')
