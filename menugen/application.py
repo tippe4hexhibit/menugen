@@ -25,7 +25,7 @@ class MenuGenApp:
         required_env_vars = [
             'AIRTABLE_API_KEY',
             'AIRTABLE_BASE',
-            'OUTPUT_DIR',
+            'MENU_OUTPUT_DIR',
             'TABLE_DINING_VENDORS',
             'TABLE_DINING_EVENTS',
             'TABLE_DINING_EVENTMENUITEMS'
@@ -85,6 +85,7 @@ class MenuGenApp:
 
             if "Food Vendor" in dining_event.keys():
                 dining_event['Food Vendor Data'] = dining_vendors.get_vendor(dining_event['Food Vendor'][0])
+                pprint(dining_event)
             if "Menu Items IDs" in dining_event.keys():
                 dining_event['Menu Items'] = []
                 for item_id in dining_event['Menu Items IDs']:
