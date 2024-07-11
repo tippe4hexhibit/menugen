@@ -44,10 +44,10 @@ class MenuGenApp:
                 else:
                     log.info(f'{env_var} is {os.environ[env_var]}')
 
-        output_path = Path(os.environ['OUTPUT_DIR'])
+        output_path = Path(os.environ['MENU_OUTPUT_DIR'])
 
         if not output_path.exists():
-            log.error(f"OUTPUT_DIR ({os.environ['OUTPUT_DIR']}) does not exist.")
+            log.error(f"OUTPUT_DIR ({os.environ['MENU_OUTPUT_DIR']}) does not exist.")
             exit(254)
 
         api = Api(os.environ['AIRTABLE_API_KEY'])
