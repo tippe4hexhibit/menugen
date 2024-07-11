@@ -14,6 +14,8 @@ try:
 except ImportError:
     from yaml import Loader, Dumper
 
+Dumper.ignore_aliases = lambda *args : True
+
 log = logging.getLogger(__name__)
 
 
