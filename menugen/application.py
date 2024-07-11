@@ -97,9 +97,10 @@ class MenuGenApp:
                 for item_id in dining_event['Menu Items IDs']:
                     dining_event['Menu Items'] += dining_eventmenuitems.get_item(item_id)
 
-                dining_event['Menu Items'] = sorted(dining_event['Menu Items'],
-                                                    key=lambda x: (CATEGORY_ORDER_MAPPING[x['Tag'][0]])
-                                                    )
+                # This is likely not needed. The order is holding steady from AirTable
+                # dining_event['Menu Items'] = sorted(dining_event['Menu Items'],
+                #                                     key=lambda x: (CATEGORY_ORDER_MAPPING[x['Tag'][0]])
+                #                                     )
 
             full_event_list['dates'][current_date]['events'].append(dining_event)
 
