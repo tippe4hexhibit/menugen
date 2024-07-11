@@ -107,6 +107,6 @@ class MenuGenApp:
             yaml_data = yaml.dump(full_event_list['dates'][event_date], Dumper=Dumper, sort_keys=False)
 
             with open(output_path.joinpath(filename).with_suffix('.yaml'), 'w') as f:
-                log.info(f'Writing {event_date} to {output_path.joinpath(filename).with_suffix('.yaml')}')
+                log.info(f"Writing {event_date} to {output_path.joinpath(filename).with_suffix('.yaml')}")
                 f.write(yaml_data)
 
