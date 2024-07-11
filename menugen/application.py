@@ -18,6 +18,9 @@ Dumper.ignore_aliases = lambda *args : True
 
 log = logging.getLogger(__name__)
 
+CATEGORY_ORDER = ['Entrées', 'Drinks', 'À La Carte', 'Other Items']
+CATEGORY_ORDER_MAPPING = {category: index for index, category in enumerate(CATEGORY_ORDER)}
+
 
 class MenuGenApp:
 
@@ -87,31 +90,23 @@ class MenuGenApp:
 
             if "Food Vendor" in dining_event.keys():
                 dining_event['Food Vendor Data'] = dining_vendors.get_vendor(dining_event['Food Vendor'][0])
-                pprint(dining_event)
             if "Menu Items IDs" in dining_event.keys():
                 dining_event['Menu Items'] = []
                 for item_id in dining_event['Menu Items IDs']:
                     dining_event['Menu Items'] += dining_eventmenuitems.get_item(item_id)
 
+                dining_event['Menu Items'] = sorted(dining_event['Menu Items'],
+                                                    key=lambda x: (CATEGORY_ORDER_MAPPING[x['Tag'][0]])
+                                                    )
+
             full_event_list['dates'][current_date]['events'].append(dining_event)
 
         for event_date in full_event_list['dates']:
             filename = 'dining_' + ''.join(event_date.split('-'))
-            event_struct = {
-                'dates': {
-                    event_date: full_event_list['dates'][event_date]
-                }
-            }
 
-            yaml_data = yaml.dump(event_struct, Dumper=Dumper, sort_keys=False)
+            yaml_data = yaml.dump(full_event_list['dates'][event_date], Dumper=Dumper, sort_keys=False)
 
             with open(output_path.joinpath(filename).with_suffix('.yaml'), 'w') as f:
                 log.info(f'Writing {event_date} to {output_path.joinpath(filename).with_suffix('.yaml')}')
                 f.write(yaml_data)
 
-        # print(yaml.dump(full_event_list))
-
-            yaml_data = yaml.dump(full_event_list, Dumper=Dumper, sort_keys=False)
-            with open(output_path.joinpath('full_event_list').with_suffix('.yaml'), 'w') as f:
-                log.info(f"Writing full_event_list to {output_path.joinpath('dining_full_event_list')}.with_suffix('.yaml')")
-                f.write(yaml_data)

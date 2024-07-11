@@ -2,11 +2,11 @@ import logging
 
 log = logging.getLogger(__name__)
 
-MEAL_ORDER = ['Breakfast', 'AllDay', 'Lunch', 'Dinner']
+MEAL_ORDER = ['Breakfast', 'All Day', 'Lunch', 'Dinner']
 MEAL_ORDER_MAPPING = {meal: index for index, meal in enumerate(MEAL_ORDER)}
 
 
-class DiningVendors():
+class DiningVendors:
     def __init__(self, vendor_data):
         log.info(f'Initializing {self.__class__}')
         self._vendor_data = vendor_data
