@@ -2,7 +2,7 @@ import logging
 
 log = logging.getLogger(__name__)
 
-MEAL_ORDER = ['Breakfast', 'Snacks', 'All Day', 'Lunch', 'Dinner']
+MEAL_ORDER = ['Pre-Fair Breakfast', 'Pre-Fair Lunch', 'Breakfast', 'Snacks', 'All Day', 'Lunch', 'Dinner']
 MEAL_ORDER_MAPPING = {meal: index for index, meal in enumerate(MEAL_ORDER)}
 
 
