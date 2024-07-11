@@ -2,7 +2,7 @@ import logging
 
 log = logging.getLogger(__name__)
 
-MEAL_ORDER = ['Breakfast', 'All Day', 'Lunch', 'Dinner']
+MEAL_ORDER = ['Breakfast', 'Snacks', 'All Day', 'Lunch', 'Dinner']
 MEAL_ORDER_MAPPING = {meal: index for index, meal in enumerate(MEAL_ORDER)}
 
 
@@ -23,6 +23,9 @@ class DiningVendors:
 class DiningEvents:
     def __init__(self, event_data):
         log.info(f'Initializing {self.__class__}')
+
+        for i in event_data:
+            print(i)
 
         self.events = sorted(event_data,
                              key=lambda x: (x["fields"]["Date"],
