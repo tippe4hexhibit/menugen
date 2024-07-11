@@ -1,11 +1,18 @@
 import logging
 import os
+from datetime import datetime
 
 from pathlib import Path
 
 from pyairtable import Api
 from menugen.models.menu import DiningVendors, DiningEvents, DiningEventMenuItems
-from menugen.models.yaml import YamlSchedule
+
+import yaml
+
+try:
+    from yaml import CLoader as Loader, CDumper as Dumper
+except ImportError:
+    from yaml import Loader, Dumper
 
 log = logging.getLogger(__name__)
 
@@ -55,24 +62,53 @@ class MenuGenApp:
                                                   os.environ['TABLE_DINING_EVENTMENUITEMS']).all()
 
         dining_vendors = DiningVendors(raw_dining_vendors)
-
         dining_events = DiningEvents(raw_dining_events)
-
         dining_eventmenuitems = DiningEventMenuItems(raw_dining_eventmenuitems)
+        dining_eventitem = dining_eventmenuitems.get_item('recmbIgNCywbSHjBG')
 
-        # # Build the object structure from the Airtable data
-        # full_schedule = FullSchedule(raw_schedule)
-        #
-        # # Dump out all the YAMLs for each schedule type, by date
-        # schedule_prefix = None
-        # for schedule_type, schedule in full_schedule.get_schedules().items():
-        #     schedule_yamls = YamlSchedule(schedule)
-        #     schedule_prefix = schedule.schedule_abbreviation + '_'
-        #
-        #     for yaml_date, yaml in schedule_yamls.get_yamls().items():
-        #         schedule_filename = schedule_prefix + ''.join(yaml_date.split('-')) + '.yaml'
-        #
-        #         with open(output_path / schedule_filename, 'w') as yaml_out:
-        #             log.info(f'Writing {schedule_type} schedule file for {yaml_date} called {schedule_filename}')
-        #             yaml_out.write(yaml)
-        #
+        from pprint import pprint
+
+        current_date = ""
+        full_event_list = None
+        for dining_event in dining_events:
+            if not current_date:
+                current_date = dining_event['Date']
+                full_event_list = {'dates': {}}
+
+            if current_date != dining_event['Date']:
+                current_date = dining_event['Date']
+
+            if current_date not in full_event_list['dates'].keys():
+                full_event_list['dates'][current_date] = {}
+                full_event_list['dates'][current_date]['events'] = []
+                full_event_list['dates'][current_date]['longdate'] = datetime.strptime(current_date, '%Y-%m-%d').strftime('%A, %B %d, %Y')
+
+            if "Food Vendor" in dining_event.keys():
+                dining_event['Food Vendor Data'] = dining_vendors.get_vendor(dining_event['Food Vendor'][0])
+            if "Menu Items IDs" in dining_event.keys():
+                dining_event['Menu Items'] = []
+                for item_id in dining_event['Menu Items IDs']:
+                    dining_event['Menu Items'] += dining_eventmenuitems.get_item(item_id)
+
+            full_event_list['dates'][current_date]['events'].append(dining_event)
+
+        for event_date in full_event_list['dates']:
+            filename = 'dining_' + ''.join(event_date.split('-'))
+            event_struct = {
+                'dates': {
+                    event_date: full_event_list['dates'][event_date]
+                }
+            }
+
+            yaml_data = yaml.dump(event_struct, Dumper=Dumper, sort_keys=False)
+
+            with open(output_path.joinpath(filename).with_suffix('.yaml'), 'w') as f:
+                log.info(f'Writing {event_date} to {output_path.joinpath(filename).with_suffix('.yaml')}')
+                f.write(yaml_data)
+
+        # print(yaml.dump(full_event_list))
+
+            yaml_data = yaml.dump(full_event_list, Dumper=Dumper, sort_keys=False)
+            with open(output_path.joinpath('full_event_list').with_suffix('.yaml'), 'w') as f:
+                log.info(f"Writing full_event_list to {output_path.joinpath('dining_full_event_list')}.with_suffix('.yaml')")
+                f.write(yaml_data)
