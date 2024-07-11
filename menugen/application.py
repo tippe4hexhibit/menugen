@@ -89,7 +89,12 @@ class MenuGenApp:
                 full_event_list['dates'][current_date]['longdate'] = datetime.strptime(current_date, '%Y-%m-%d').strftime('%A, %B %d, %Y')
 
             if "Food Vendor" in dining_event.keys():
+                log.info(f'Appending Food Vendor Data for {dining_event["Food Vendor"][0]} on Menu ID {dining_event["Menu ID"]}.')
                 dining_event['Food Vendor Data'] = dining_vendors.get_vendor(dining_event['Food Vendor'][0])
+                log.info(f'Food Vendor Data is: {dining_event["Food Vendor Data"]}')
+            else:
+                log.info(f'Food Vendor Data for Menu ID {dining_event["Menu ID"]} not found.')
+
             if "Menu Items IDs" in dining_event.keys():
                 dining_event['Menu Items'] = []
                 for item_id in dining_event['Menu Items IDs']:
