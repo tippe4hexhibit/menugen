@@ -24,9 +24,6 @@ class DiningEvents:
     def __init__(self, event_data):
         log.info(f'Initializing {self.__class__}')
 
-        for i in event_data:
-            print(i)
-
         self.events = sorted(event_data,
                              key=lambda x: (x["fields"]["Date"],
                                             MEAL_ORDER_MAPPING[x["fields"]["Meal"]]
