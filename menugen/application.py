@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 
 from pathlib import Path
+from datetime import datetime, timedelta
 
 from pyairtable import Api
 from menugen.models.menu import DiningVendors, DiningEvents, DiningEventMenuItems
@@ -103,12 +104,17 @@ class MenuGenApp:
 
             full_event_list['dates'][current_date]['events'].append(dining_event)
 
-        for event_date in full_event_list['dates']:
-            filename = 'dining_' + ''.join(event_date.split('-'))
 
-            yaml_data = yaml.dump(full_event_list['dates'][event_date], Dumper=Dumper, sort_keys=False)
+        if (datetime.strptime(max(full_event_list['dates']), '%Y-%m-%d') >
+                datetime.combine(datetime.now() + timedelta(days=1), datetime.min.time())):
+            for event_date in full_event_list['dates']:
+                filename = 'dining_' + ''.join(event_date.split('-'))
 
-            with open(output_path.joinpath(filename).with_suffix('.yaml'), 'w') as f:
-                log.info(f"Writing {event_date} to {output_path.joinpath(filename).with_suffix('.yaml')}")
-                f.write(yaml_data)
+                yaml_data = yaml.dump(full_event_list['dates'][event_date], Dumper=Dumper, sort_keys=False)
+
+                with open(output_path.joinpath(filename).with_suffix('.yaml'), 'w') as f:
+                    log.info(f"Writing {event_date} to {output_path.joinpath(filename).with_suffix('.yaml')}")
+                    f.write(yaml_data)
+        else:
+            log.info('All event dates have passed. No data files will be generated.')
 
