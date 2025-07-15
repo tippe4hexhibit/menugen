@@ -46,13 +46,14 @@ class DiningEventMenuItems:
 
         results = []
         for item in self._items_data:
+            print(item)
             if item["id"] == item_id:
                 results.append(item['fields'])
 
                 # Collect any child items related to this menu item
                 # and stack them in the list
-                if "Child Items" in item['fields'].keys():
-                    for child_item in item['fields']['Child Items']:
+                if "Combo Item IDs" in item['fields'].keys():
+                    for child_item in item['fields']['Combo Item IDs']:
                         results.append(self.get_item(child_item)[0])
 
         return results
