@@ -104,10 +104,10 @@ class MenuGenApp:
 
             full_event_list['dates'][current_date]['events'].append(dining_event)
 
-        log.info(f"{datetime.combine(datetime.now(), datetime.min.time())} <= {datetime.strptime(max(full_event_list['dates']), '%Y-%m-%d')}")
+        log.info(f"{datetime.combine(datetime.now(), datetime.min.time())} <= {datetime.strptime(max(full_event_list['dates']), '%Y-%m-%d') + timedelta(days=1)}")
 
         if (datetime.combine(datetime.now(), datetime.min.time()) <= 
-                datetime.strptime(max(full_event_list['dates']), '%Y-%m-%d')):
+                datetime.strptime(max(full_event_list['dates']), '%Y-%m-%d') + timedelta(days=1)):
             for event_date in full_event_list['dates']:
                 filename = 'dining_' + ''.join(event_date.split('-'))
 
